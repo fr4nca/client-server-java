@@ -34,13 +34,19 @@ class ClientThread extends Thread {
 			entrada = new Scanner(this.cliente.getInputStream());
 			while (entrada.hasNextLine()) {
 				linha = entrada.nextLine();
+				if (linha.equals("Exit")) {
+					System.out.println("Deixando o servidor..");
+					close();
+					Server.removeCliente(this);
+					break;
+				}
 				System.out.println(this.getName() + " diz: " + linha);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				System.out.println("Cliente fechou a conexão");
+				System.out.println(this.getName() + " fechou a conexão");
 				cliente.close();
 			} catch (IOException e) {
 				e.printStackTrace();

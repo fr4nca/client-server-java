@@ -17,12 +17,7 @@ public class Client {
 			System.out.print("Digite seu nome: ");
 			String linha = null;
 			while (teclado.hasNextLine()) {
-				linha = teclado.nextLine();
-				if (linha.equals("Exit")) {
-					System.out.println("Deixando o servidor..");
-					cliente.close();
-					System.exit(0);
-				}
+				linha = teclado.nextLine();				
 				saida.println(linha);
 			}
 		} catch (IOException e) {

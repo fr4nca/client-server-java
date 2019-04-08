@@ -26,8 +26,7 @@ public class Server {
 				Socket cliente = server.accept();
 				entrada = new Scanner(cliente.getInputStream());
 				String nome = entrada.nextLine();
-				ClientThread clienteThread = new ClientThread(cliente, nome);
-				addCliente(clienteThread);
+				addCliente(new ClientThread(cliente, nome));
 			}
 
 		} catch (IOException ex) {
@@ -52,5 +51,10 @@ public class Server {
 		System.out.println(
 				"Seja bem-vindo " + cliente.getName() + "\nVocê esta conectado do IP: " + cliente.getIpAddress());
 		return true;
+	}
+
+	public static void removeCliente(ClientThread cliente) {
+		clientes.remove(cliente);
+
 	}
 }
