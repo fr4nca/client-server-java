@@ -9,44 +9,25 @@ import java.util.logging.Logger;
 
 public class Server {
 
+	final static List<ClientThread> clientes = new ArrayList<>();
+
 	public static void main(String args[]) throws IOException {
 
 		ServerSocket server = null;
 		Scanner entrada = null;
 		final int PORT = 12345;
-		final List<ClientThread> clientes = new ArrayList<>();
 
 		try {
 			server = new ServerSocket(PORT);
-			System.out.println("Servidor iniciado no endereço: " + server.getLocalSocketAddress() + " na porta " + PORT);
+			System.out
+					.println("Servidor iniciado no endereço: " + server.getLocalSocketAddress() + " na porta " + PORT);
 
 			while (true) {
-				if (clientes.isEmpty()) {
-					Socket cliente = server.accept();
-					entrada = new Scanner(cliente.getInputStream());
-					String nome = entrada.nextLine();
-					ClientThread clienteThread = new ClientThread(cliente, nome);
-					clientes.add(clienteThread);
-					clienteThread.start();
-					System.out.println("Seja bem-vindo " + clienteThread.getName() + "\nVocê esta conectado do IP: "
-							+ cliente.getInetAddress().getHostAddress());
-				} else {
-					Socket cliente = server.accept();
-					entrada = new Scanner(cliente.getInputStream());
-					String nome = entrada.nextLine();
-					for (ClientThread clientThread : clientes) {
-						if (clientThread.getName().equals(nome)
-								|| clientThread.getIpAddress().equals(cliente.getInetAddress().getHostAddress())) {
-							System.out.println("Já existe um usuário com este nick ou IP..");
-							cliente.close();
-						}
-					}
-					ClientThread clienteThread = new ClientThread(cliente, nome);
-					clientes.add(clienteThread);
-					clienteThread.start();
-					System.out.println("Seja bem-vindo " + clienteThread.getName() + "\nVocê esta conectado do IP: "
-							+ cliente.getInetAddress().getHostAddress());
-				}
+				Socket cliente = server.accept();
+				entrada = new Scanner(cliente.getInputStream());
+				String nome = entrada.nextLine();
+				ClientThread clienteThread = new ClientThread(cliente, nome);
+				addCliente(clienteThread);
 			}
 
 		} catch (IOException ex) {
@@ -55,5 +36,21 @@ public class Server {
 			server.close();
 			entrada.close();
 		}
+	}
+
+	public static boolean addCliente(ClientThread cliente) {
+		for (ClientThread clientThread : clientes) {
+			if (clientThread.getName().equals(cliente.getName())
+					|| clientThread.getIpAddress().equals(cliente.getIpAddress())) {
+				System.out.println("Já existe um usuário com este nick ou IP..");
+				cliente.close();
+				return false;
+			}
+		}
+		clientes.add(cliente);
+		cliente.start();
+		System.out.println(
+				"Seja bem-vindo " + cliente.getName() + "\nVocê esta conectado do IP: " + cliente.getIpAddress());
+		return true;
 	}
 }

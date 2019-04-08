@@ -11,7 +11,6 @@ public class Client {
 		final String HOST = "127.0.2.1";
 
 		Socket cliente = new Socket(HOST, PORT);
-		
 
 		try (Scanner teclado = new Scanner(System.in); PrintStream saida = new PrintStream(cliente.getOutputStream())) {
 			System.out.println("Digite 'Exit' para finalizar a conexão.");

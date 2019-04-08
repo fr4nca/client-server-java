@@ -12,13 +12,21 @@ class ClientThread extends Thread {
 		this.cliente = cliente;
 		this.setName(nome);
 	}
-	
+
 	public String getIpAddress() {
 		return this.cliente.getInetAddress().getHostAddress();
 	}
-	
+
 	public int getPortNumber() {
 		return this.cliente.getPort();
+	}
+
+	public void close() {
+		try {
+			this.cliente.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void run() {
