@@ -8,7 +8,6 @@
 .project
 .classpath
 factoryConfiguration.json
-.metadata
 
 # End of https://www.gitignore.io/api/code-java
 
